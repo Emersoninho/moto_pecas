@@ -1,9 +1,7 @@
 :root{
-     
-    --main-color: #ac4147;
-    --dark-color: #411f2d;
-    --light-color: #ffc27f;
-    --contrast-color: #f88863;
-    --differential-color: #ffe29a;
-
+    --main-color: #2a73b8; /* Azul predominante */
+    --dark-color: #1b3a57; /* Azul escuro */
+    --light-color: #a4d4ff; /* Azul claro */
+    --contrast-color: #5dbcd2; /* Azul turquesa para contraste */
+    --differential-color: #d1e8ff; /* Azul pastel para diferenciação */
 }
