@@ -9,17 +9,17 @@
 <div class="container">
     <div class="row">
 
-        <div class="col-md card-dashboard">
+        <div onclick="exibir_form('1')" class="col-md card-dashboard">
             <p class="text-card">Adicionar clientes</p>
         </div>
 
-        <div class="col-md card-dashboard">
+        <div onclick="exibir_form('2')" class="col-md card-dashboard">
             <p class="text-card">Atualizar cliente</p>
         </div>
 
     </div>
 
-    <div class="adicionar-cliente">
+    <div id="adicionar-cliente" class="adicionar-cliente">
         <form action="{% url "clientes" %}" method="POST"> 
             {% csrf_token %}
 
@@ -40,8 +40,8 @@
             <hr style="background-color:gray;">
 
             <div class="add-carros">
-                <h3>carros</h3>
-                <span class="btn-add-carros" onclick="add_carro()">+ Adicionar uma carro</span>
+                <h3>motos</h3>
+                <span class="btn-add-carros" onclick="add_carro()">+ Adicionar uma moto</span>
                 <div id="form-carro">
                     {% for carro, placa, ano  in carros %}
                         <div class="row">
@@ -62,6 +62,10 @@
             <br>
             <input type="submit" value="Cadastrar" class="btn-principal">
         </form> 
+    </div>
+
+    <div id="att_cliente">
+        teste
     </div>
 
 </div>
