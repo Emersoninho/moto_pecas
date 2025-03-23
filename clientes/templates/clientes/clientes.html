@@ -65,8 +65,9 @@
     </div>
 
     <div id="att_cliente">
-        <p></p>
+        <p>Cliente:</p>
         <select id="cliente-select" onchange="dados_cliente()" class="form-control">
+            <option value=""></option>
             {% for cliente in clientes %}
                 <option value="{{cliente.id}}">{{cliente.nome}}</option>
             {% endfor %}
@@ -75,6 +76,7 @@
         <hr>
 
         <div id="form-att-cliente">
+            <input type="hidden" id="id">
             <p>Nome:</p>
             <input id="nome" type="text" class="form-control">
             <p>Sobrenome:</p>
@@ -83,12 +85,38 @@
             <input id="email" type="text" class="form-control">
             <p>CPF:</p>
             <input id="cpf" type="text" class="form-control">
-            <hr>
-            <h3>Motos</h3>
+            <br>
+            <input onclick="update_cliente()" type="submit" value="Salvar" class="btn btn-success">
+            <hr style="background-color: gray;">
+            <h2>Motos</h2>
 
             <div id="carros">
-
+    <!-- Renderiza o formulário de carros -->
+    {% for carro in data.carros %}
+        <form action="/clientes/update_carro/{{ carro.id }}/" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md">
+                    <input class="form-control" type="text" name="carro" value="{{ carro.carro }}">
+                </div>
+                <div class="col-md">
+                    <input class="form-control" type="text" name="placa" value="{{ carro.placa }}">
+                </div>
+                <div class="col-md">
+                    <input class="form-control" type="text" name="ano" value="{{ carro.ano }}">
+                </div>
+                <div class="col-md">
+                    <input class="btn btn-success" type="submit" value="Submeter pedido">
+                </div>
             </div>
+        </form>
+        <div class="col-md">
+            <a class="btn btn-danger" href="/clientes/excluir_carro/{{ carro.id }}">EXCLUIR</a>
+        </div>
+        <hr>
+    {% endfor %}
+</div>
+
         </div>
     </div>
 

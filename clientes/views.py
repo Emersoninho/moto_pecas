@@ -1,10 +1,11 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from .models import Cliente, Carro  # Certifique-se de importar corretamente
 import re
 from django.core import serializers
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 
 def clientes(request):
     if request.method == 'GET':
@@ -45,14 +46,13 @@ def clientes(request):
 
 def att_cliente(request):
     id_cliente = request.POST.get('id_cliente')
-
     cliente = Cliente.objects.filter(id=id_cliente)
     carros = Carro.objects.filter(cliente=cliente[0])
-
+    cliente_id = json.loads(serializers.serialize('json', cliente))[0]['pk']
     clientes_json = json.loads(serializers.serialize('json', cliente))[0]['fields']
     carros_json = json.loads(serializers.serialize('json', carros))
     carros_json = [{'fields': carro['fields'], 'id': carro['pk']} for carro in carros_json]
-    data = {'cliente': clientes_json, 'carros': carros_json}
+    data = {'cliente': clientes_json, 'carros': carros_json, 'cliente_id': cliente_id}
     return JsonResponse(data)
 
 @csrf_exempt
@@ -61,12 +61,49 @@ def update_carro(request, id):
     placa = request.POST.get('placa')
     ano = request.POST.get('ano')
 
-    carro = Carro.objects.get(id=id)
-    list_carro = Carro.objects.filter(placa=placa).exclude(id=id)
-    if list_carro.exists():
-        return HttpResponse({'mensagem': 'Placa já existe'})
-    carro.carro = nome_carro
-    carro.placa = placa
-    carro.ano = ano
-    carro.save()
-    return HttpResponse('Dados alterado com sucesso!')
+    try:
+        carro = Carro.objects.get(id=id)
+        list_carro = Carro.objects.filter(placa=placa).exclude(id=id)
+        if list_carro.exists():
+            return JsonResponse({'mensagem': 'Placa já existe'})
+        carro.carro = nome_carro
+        carro.placa = placa
+        carro.ano = ano
+        carro.save()
+        return JsonResponse({'mensagem': 'Dados alterados com sucesso!'})
+    except Carro.DoesNotExist:
+        return JsonResponse({'mensagem': 'Carro não encontrado'})
+    
+def excluir_carro(request, id):
+    try:
+        carro = Carro.objects.get(id=id)
+        carro.delete()
+        return redirect(reverse('clientes')+f'?aba=att_cliente&id_cliente={id}')
+    except:
+        return redirect(reverse('clientes')+f'?aba=att_cliente&id_cliente={id}')
+    
+def update_cliente(request, id):
+    body = json.loads(request.body)
+    nome = body['nome']
+    sobrenome = body['sobrenome']
+    email = body['email']
+    cpf = body['cpf']
+
+    cliente = get_object_or_404(Cliente, id=id)
+    try:
+        cliente = Cliente.objects.get(id=id)
+        email_cliente = Cliente.objects.filter(email=email).exclude(id=id)
+        if email_cliente.exists():
+            return JsonResponse({'mensagem': 'email já existe'})
+        cpf_cliente = Cliente.objects.filter(cpf=cpf).exclude(id=id)
+        if cpf_cliente.exists():
+            return JsonResponse({'mensagem': 'cpf ja existe'})
+        
+        cliente.nome = nome
+        cliente.sobrenome = sobrenome
+        cliente.email = email
+        cliente.cpf = cpf
+        cliente.save()
+        return JsonResponse({'status': '200', 'nome': nome, 'sobrenome': sobrenome, 'email': email, 'cpf': cpf})
+    except:
+        return JsonResponse({'status': '500'})
