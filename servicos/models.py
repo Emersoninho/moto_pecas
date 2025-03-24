@@ -2,7 +2,7 @@ from django.db import models
 from clientes.models import Cliente
 from .choices import ChoicesCategoriaManutencao
 from datetime import datetime
-from secrets import token_hex
+from secrets import token_hex, token_urlsafe
 
 class CategoriaManutencao(models.Model):
     titulo = models.CharField(max_length=3, choices=ChoicesCategoriaManutencao.choices)
@@ -19,6 +19,7 @@ class Servico(models.Model):
     data_entrega = models.DateField(null=True)
     finalizado = models.BooleanField(default=False)
     protocolo = models.CharField(max_length=52, null=True, blank=True)
+    identificador = models.CharField(max_length=24, null=True, blank=True)
 
     def __str__(self):
         return self.titulo
@@ -26,11 +27,15 @@ class Servico(models.Model):
     def save(self, *args, **kwargs):
         if not self.protocolo:
             self.protocolo = datetime.now().strftime('%d/%m/%Y-%H:%M:%S-') + token_hex(16)
+
+        if not self.identificador:
+            self.identificador = token_urlsafe(16)
+            
         super(Servico, self).save(*args, **kwargs)
 
     def preco_total(self):
         preco_total = float(0)
-        for categoria in self.CategoriaManutencao.all():  
+        for categoria in self.categoria_manutencao.all():  
             preco_total += float(categoria.preco)
 
         return preco_total    
