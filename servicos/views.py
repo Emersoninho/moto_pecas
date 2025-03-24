@@ -19,4 +19,4 @@ def novo_servico(request):
 def listar_servico(request):
     if request.method == 'GET':
         servicos = Servico.objects.all()
-        return render(request, 'listar_servico.html', {'servico': servicos})
+        return render(request, 'listar_servico.html', {'servicos': servicos})
