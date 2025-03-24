@@ -10,6 +10,14 @@ class CategoriaManutencao(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+class ServicoAdicional(models.Model):
+    titulo = models.CharField(max_length=50)
+    descricao = models.TextField()
+    preco = models.FloatField()
+
+    def __str__(self) -> str:
+        return self.titulo    
 
 class Servico(models.Model):
     titulo = models.CharField(max_length=30)
@@ -30,7 +38,7 @@ class Servico(models.Model):
 
         if not self.identificador:
             self.identificador = token_urlsafe(16)
-            
+
         super(Servico, self).save(*args, **kwargs)
 
     def preco_total(self):
