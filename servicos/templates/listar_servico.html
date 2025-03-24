@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'cliente/css/cliente.css' %}">
+{% endblock 'head' %}
+
+{% block 'dashboard' %}
+    <div class="container">
+        <table class="table table-dark">
+            <thead>
+                <th>
+                    <th scope="col">Protocolo</th>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Preço total</th>
+                </th>
+            </thead>
+            <tbody>
+                {% for servico in servicos %}
+                    <tr>
+                        <th>{{servico.Protocolo}}</th>
+                        <td>{{servico.Titulo}}</td>
+                        <td>{{servico.cliente}}</td>
+                        <td>
+                            {% if servico.finalizado %}
+                                <span class="badge badge-success">Finalizado</span>
+                            {% else %}
+                                <span class="badge badge-info">Em manutenção</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock 'dashboard' %}
+
+
+

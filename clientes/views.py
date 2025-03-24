@@ -7,10 +7,20 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from .models import Cliente, Carro
+import re
+import json
+from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+
 def clientes(request):
     if request.method == 'GET':
         clientes_list = Cliente.objects.all()
         return render(request, 'clientes/clientes.html', {'clientes': clientes_list})
+    
     elif request.method == 'POST':
         nome = request.POST.get('nome')
         sobrenome = request.POST.get('sobrenome')
@@ -20,13 +30,26 @@ def clientes(request):
         placas = request.POST.getlist('placa')
         anos = request.POST.getlist('ano')
 
-        cliente = Cliente.objects.filter(cpf=cpf)
-        if cliente.exists():
-            return render(request, 'clientes/clientes.html', {'nome': nome, 'sobrenome': sobrenome, 'email': email, 'carro': zip(carros, placas, anos)})
+        # 🚨 Validação de CPF e E-mail antes de cadastrar
+        if Cliente.objects.filter(cpf=cpf).exists():
+            return render(request, 'clientes/clientes.html', {
+                'erro': 'CPF já cadastrado!',
+                'nome': nome, 'sobrenome': sobrenome, 'email': email, 'carros': zip(carros, placas, anos)
+            })
 
-        # Validação de email
-        if not re.fullmatch(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+', email):
-            return render(request, 'clientes/clientes.html', {'nome': nome, 'sobrenome': sobrenome, 'cpf': cpf, 'carros': zip(carros, placas, anos)})
+        if Cliente.objects.filter(email=email).exists():
+            return render(request, 'clientes/clientes.html', {
+                'erro': 'E-mail já cadastrado!',
+                'nome': nome, 'sobrenome': sobrenome, 'cpf': cpf, 'carros': zip(carros, placas, anos)
+            })
+
+        # 🚨 Validação de formato de e-mail
+        email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(email_regex, email):
+            return render(request, 'clientes/clientes.html', {
+                'erro': 'E-mail inválido!',
+                'nome': nome, 'sobrenome': sobrenome, 'cpf': cpf, 'carros': zip(carros, placas, anos)
+            })
 
         # Criar cliente
         cliente = Cliente(
@@ -39,10 +62,11 @@ def clientes(request):
 
         # Criar carros associados ao cliente
         for carro, placa, ano in zip(carros, placas, anos):
-            car = Carro(carro=carro, placa=placa, ano=ano, cliente=cliente)  # Usando Carro (com C maiúsculo)
+            car = Carro(carro=carro, placa=placa, ano=ano, cliente=cliente)
             car.save()
 
         return render(request, 'clientes/clientes.html', {'mensagem': 'Cliente cadastrado com sucesso!'})
+
 
 def att_cliente(request):
     id_cliente = request.POST.get('id_cliente')
