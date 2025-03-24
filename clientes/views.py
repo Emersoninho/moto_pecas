@@ -91,14 +91,6 @@ def update_cliente(request, id):
 
     cliente = get_object_or_404(Cliente, id=id)
     try:
-        cliente = Cliente.objects.get(id=id)
-        email_cliente = Cliente.objects.filter(email=email).exclude(id=id)
-        if email_cliente.exists():
-            return JsonResponse({'mensagem': 'email já existe'})
-        cpf_cliente = Cliente.objects.filter(cpf=cpf).exclude(id=id)
-        if cpf_cliente.exists():
-            return JsonResponse({'mensagem': 'cpf ja existe'})
-        
         cliente.nome = nome
         cliente.sobrenome = sobrenome
         cliente.email = email

@@ -84,7 +84,7 @@ function dados_cliente() {
                         <input class='form-control' type='text' name='ano' value='" + data['carros'][i]['fields']['ano'] + "'>\
                     </div>\
                     <div class='col-md'>\
-                        <input class='btn btn-success' type='submit' value='Salvar'>\
+                        <input class='btn btn-success' type='submit' value='Submeter pedido'>\
                     </div>\
                     </form>\
                     <div class='col-md'>\
