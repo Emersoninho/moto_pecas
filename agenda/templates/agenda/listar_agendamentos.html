@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block 'dashboard' %}
+<div class="container mt-4">
+    <h2 class="mb-3">Lista de Agendamentos</h2>
+    
+    <div class="card p-4 shadow-sm">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Serviço</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agendamento in agendamentos %}
+                <tr>
+                    <td>{{ agendamento.nome }}</td>
+                    <td>{{ agendamento.telefone }}</td>
+                    <td>{{ agendamento.servico }}</td>
+                    <td>{{ agendamento.data_agendamento }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Nenhum agendamento encontrado</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'criar_agendamento' %}" class="btn btn-success">Novo Agendamento</a>
+    </div>
+</div>
+{% endblock %}

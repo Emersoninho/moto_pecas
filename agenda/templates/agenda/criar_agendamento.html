@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block 'dashboard' %}
+<div class="container mt-4">
+    <h2 class="mb-3">Agendar Serviço</h2>
+    
+    <div class="card p-4 shadow-sm">
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary">Agendar</button>
+            <a href="{% url 'listar_agendamentos' %}" class="btn btn-secondary">Ver Agendamentos</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

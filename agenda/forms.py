@@ -6,5 +6,8 @@ class AgendamentoForm(forms.ModelForm):
         model = Agendamento
         fields = ['nome', 'telefone', 'servico', 'data_agendamento']
         widgets = {
-            'data_agendamento': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu nome'}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu telefone'}),
+            'servico': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Serviço desejado'}),
+            'data_agendamento': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD', 'type': 'date'}),
         }

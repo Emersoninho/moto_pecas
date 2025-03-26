@@ -5,3 +5,13 @@
     --contrast-color: #5dbcd2; /* Azul turquesa para contraste */
     --differential-color: #d1e8ff; /* Azul pastel para diferenciação */
 }
+
+#calendar {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+

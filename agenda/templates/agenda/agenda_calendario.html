@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block 'title' %}Agenda{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container mt-4">
+    <h2 class="text-center">Agenda de Agendamentos</h2>
+    <div id="calendar"></div>
+</div>
+
+<!-- Script para carregar o calendário -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'pt-br',
+        events: "{% url 'listar_agendamentos_json' %}",
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}
