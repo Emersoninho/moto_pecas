@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     # my app
     'clientes',
     'servicos',
+    'agenda', 
+    'historico',
 ]
 
 MIDDLEWARE = [

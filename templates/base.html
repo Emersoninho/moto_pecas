@@ -44,14 +44,28 @@
           <span class="tooltip">Serviços</span>
         </li>
         <li>
-          <a href="#">
+          <a href="{% url "agenda" %}">
             <i class='bx bx-folder' ></i>
             <span class="links_name">Agenda</span>
           </a>
           <span class="tooltip">Agenda</span>
         </li>
         <li>
-          <a href="#">
+          <a href="{% url 'criar_agendamento' %}">
+              <i class='bx bx-plus-circle'></i>
+              <span class="links_name">Novo Agendamento</span>
+          </a>
+          <span class="tooltip">Novo Agendamento</span>
+      </li>
+        <li>
+            <a href="{% url 'listar_agendamentos' %}">
+                <i class='bx bx-list-ul'></i>
+                <span class="links_name">Agendamentos</span>
+            </a>
+            <span class="tooltip">Lista de Agendamentos</span>
+        </li>      
+        <li>
+          <a href="{% url "historico" %}">
             <i class='bx bx-cog' ></i>
             <span class="links_name">Histórico</span>
           </a>
